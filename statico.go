@@ -1,22 +1,34 @@
 package main
 
 import (
-    "flag"
-    "fmt"
-    "net/http"
-    "path/filepath"
+	"flag"
+	"fmt"
+	"net/http"
+	"os"
+	"path/filepath"
+	"time"
 )
 
-var host = flag.String("host", "0.0.0.0", "Host for the server to listen on.")
-var port = flag.String("port", "8080", "Port for the server to listen on.")
-var path = flag.String("path", ".", "Path of the directory for the static " +
-    "server to serve files from.")
+var port = flag.String("port", "8080", "Port to listen on.")
+var path = flag.String("path", ".", "Root directory to serve files from.")
 
 func main() {
-    flag.Parse()
+	flag.Parse()
+	src := ":" + *port
 
-    absPath, _ := filepath.Abs(*path)
-    fmt.Println("Serving static files from directory", absPath, "on", *host + ":" + *port)
+	absPath, _ := filepath.Abs(*path)
+	fmt.Fprintln(os.Stderr, "Serving files from directory", absPath, "on", src)
 
-    panic(http.ListenAndServe(*host + ":" + *port, http.FileServer(http.Dir(*path))))
+	requestLogger := requestLogger{handler: http.FileServer(http.Dir(*path))}
+	panic(http.ListenAndServe(src, requestLogger))
+}
+
+type requestLogger struct {
+	handler http.Handler
+}
+
+func (h requestLogger) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
+	h.handler.ServeHTTP(rw, r)
+	now := time.Now().Format("15:04:05")
+	fmt.Printf("%s %s\t%s\t%s\n", now, r.Method, r.RemoteAddr, r.RequestURI)
 }
