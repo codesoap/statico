@@ -1,4 +1,5 @@
-Go's HTTP server for serving static files brought to the CLI.
+Minimalistic static file server using Go's
+[http.FileServer()](https://golang.org/pkg/net/http/#FileServer).
 
 # Usage
 ```console
