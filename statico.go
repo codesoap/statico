@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-var port = flag.String("port", "8080", "Port to listen on.")
+var port = flag.Int("p", 8080, "Port to listen on.")
 
 func main() {
 	flag.Parse()
@@ -21,7 +21,7 @@ func main() {
 	fmt.Fprintln(os.Stderr, "Serving files from directory", absPath, "on port", *port)
 
 	requestLogger := requestLogger{handler: http.FileServer(http.Dir(""))}
-	panic(http.ListenAndServe(":"+*port, requestLogger))
+	panic(http.ListenAndServe(fmt.Sprint(":", *port), requestLogger))
 }
 
 type requestLogger struct {

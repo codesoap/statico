@@ -5,14 +5,14 @@ Minimalistic static file server using Go's
 ```console
 $ statico -help
 Usage of statico:
-  -port string
-        Port to listen on. (default "8080")
+  -p int
+        Port to listen on. (default 8080)
 
 $ statico
 Serving files from directory /home/vaidik on port 8080
 ^C
 
-$ cd movies && statico -port 4000
+$ cd movies && statico -p 4000
 Serving files from directory /home/vaidik/movies on port 4000
 ```
 
