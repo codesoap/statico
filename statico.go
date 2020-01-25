@@ -13,16 +13,15 @@ var port = flag.String("port", "8080", "Port to listen on.")
 
 func main() {
 	flag.Parse()
-	src := ":" + *port
 
 	absPath, err := os.Getwd()
 	if err != nil {
 		panic(err)
 	}
-	fmt.Fprintln(os.Stderr, "Serving files from directory", absPath, "on", src)
+	fmt.Fprintln(os.Stderr, "Serving files from directory", absPath, "on port", *port)
 
 	requestLogger := requestLogger{handler: http.FileServer(http.Dir(""))}
-	panic(http.ListenAndServe(src, requestLogger))
+	panic(http.ListenAndServe(":" + *port, requestLogger))
 }
 
 type requestLogger struct {
