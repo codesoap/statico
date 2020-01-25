@@ -29,10 +29,10 @@ type requestLogger struct {
 }
 
 func (h requestLogger) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
-	h.handler.ServeHTTP(rw, r)
 	now := time.Now().Format("15:04:05")
 	remoteURL := trimPort(r.RemoteAddr)
 	fmt.Printf("%s %s\t%s\t%s\n", now, r.Method, remoteURL, r.RequestURI)
+	h.handler.ServeHTTP(rw, r)
 }
 
 func trimPort(addr string) string {
