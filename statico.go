@@ -21,7 +21,7 @@ func main() {
 	fmt.Fprintln(os.Stderr, "Serving files from directory", absPath, "on port", *port)
 
 	requestLogger := requestLogger{handler: http.FileServer(http.Dir(""))}
-	panic(http.ListenAndServe(":" + *port, requestLogger))
+	panic(http.ListenAndServe(":"+*port, requestLogger))
 }
 
 type requestLogger struct {
