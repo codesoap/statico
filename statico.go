@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 )
 
@@ -30,5 +31,13 @@ type requestLogger struct {
 func (h requestLogger) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	h.handler.ServeHTTP(rw, r)
 	now := time.Now().Format("15:04:05")
-	fmt.Printf("%s %s\t%s\t%s\n", now, r.Method, r.RemoteAddr, r.RequestURI)
+	remoteURL := trimPort(r.RemoteAddr)
+	fmt.Printf("%s %s\t%s\t%s\n", now, r.Method, remoteURL, r.RequestURI)
+}
+
+func trimPort(addr string) string {
+	if endURL := strings.LastIndex(addr, ":"); endURL > 0 {
+		return addr[:endURL]
+	}
+	return addr
 }
