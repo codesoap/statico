@@ -5,22 +5,23 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"path/filepath"
 	"strings"
 	"time"
 )
 
 var port = flag.String("port", "8080", "Port to listen on.")
-var path = flag.String("path", ".", "Root directory to serve files from.")
 
 func main() {
 	flag.Parse()
 	src := ":" + *port
 
-	absPath, _ := filepath.Abs(*path)
+	absPath, err := os.Getwd()
+	if err != nil {
+		panic(err)
+	}
 	fmt.Fprintln(os.Stderr, "Serving files from directory", absPath, "on", src)
 
-	requestLogger := requestLogger{handler: http.FileServer(http.Dir(*path))}
+	requestLogger := requestLogger{handler: http.FileServer(http.Dir(""))}
 	panic(http.ListenAndServe(src, requestLogger))
 }
 

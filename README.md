@@ -4,8 +4,6 @@ Go's HTTP server for serving static files brought to the CLI.
 ```console
 $ statico -help
 Usage of statico:
-  -path string
-        Root directory to serve files from. (default ".")
   -port string
         Port to listen on. (default "8080")
 
@@ -13,7 +11,7 @@ $ statico
 Serving files from directory /home/vaidik on :8080
 ^C
 
-$ statico -path movies -port 4000
+$ cd movies && statico -port 4000
 Serving files from directory /home/vaidik/movies on :4000
 ```
 
