@@ -26,7 +26,3 @@ go install
 
 If you don't want to install from source, you can download binaries from
 the [releases page](https://github.com/codesoap/statico/releases).
-
-# License
-`statico` is MIT licensed. See
-[LICENSE.md](https://github.com/vaidik/statico/blob/master/LICENSE.md).
