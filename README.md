@@ -17,8 +17,12 @@ Serving files from directory /home/vaidik/movies on port 4000
 ```
 
 # Installation
-`go get -u github.com/codesoap/statico` will install the latest version
-to `$HOME/go/bin/`.
+```shell
+git clone 'https://github.com/codesoap/statico.git'
+cd statico
+go install
+# The statico binary is now installed at $HOME/go/bin/ .
+```
 
 If you don't want to install from source, you can download binaries from
 the [releases page](https://github.com/codesoap/statico/releases).
