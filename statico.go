@@ -13,26 +13,22 @@ var port = flag.Int("p", 8080, "Port to listen on.")
 
 func main() {
 	flag.Parse()
-
 	absPath, err := os.Getwd()
 	if err != nil {
 		panic(err)
 	}
 	fmt.Fprintln(os.Stderr, "Serving files from directory", absPath, "on port", *port)
-
-	requestLogger := requestLogger{handler: http.FileServer(http.Dir(""))}
-	panic(http.ListenAndServe(fmt.Sprint(":", *port), requestLogger))
+	handler := logRequest(http.FileServer(http.Dir("")))
+	panic(http.ListenAndServe(fmt.Sprint(":", *port), handler))
 }
 
-type requestLogger struct {
-	handler http.Handler
-}
-
-func (h requestLogger) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
-	now := time.Now().Format("15:04:05")
-	remoteURL := trimPort(r.RemoteAddr)
-	fmt.Printf("%s %s\t%s\t%s\n", now, r.Method, remoteURL, r.RequestURI)
-	h.handler.ServeHTTP(rw, r)
+func logRequest(handler http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		now := time.Now().Format("15:04:05")
+		remoteURL := trimPort(r.RemoteAddr)
+		fmt.Printf("%s %s\t%s\t%s\n", now, r.Method, remoteURL, r.URL)
+		handler.ServeHTTP(w, r)
+	})
 }
 
 func trimPort(addr string) string {
