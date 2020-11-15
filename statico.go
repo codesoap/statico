@@ -26,7 +26,7 @@ func logRequest(handler http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		now := time.Now().Format("15:04:05")
 		remoteURL := trimPort(r.RemoteAddr)
-		fmt.Printf("%s %s\t%s\t%s\n", now, remoteURL, r.Method, r.URL)
+		fmt.Printf("%s %15s %7s %s\n", now, remoteURL, r.Method, r.URL)
 		handler.ServeHTTP(w, r)
 	})
 }
